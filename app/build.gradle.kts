@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "fr.aboin.cockteirb"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "fr.aboin.cockteirb"
