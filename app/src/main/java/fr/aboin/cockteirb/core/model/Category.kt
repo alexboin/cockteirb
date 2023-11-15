@@ -1,5 +1,3 @@
 package fr.aboin.cockteirb.core.model
 
-class Category {
-
-}
+data class Category(val name: String)
