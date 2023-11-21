@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import fr.aboin.cockteirb.R
-import fr.aboin.cockteirb.core.service.CategoriesFetcher
+import fr.aboin.cockteirb.core.service.DataFetcher
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,17 +60,34 @@ class SearchFragment : Fragment() {
 
         var binding = inflater.inflate(R.layout.fragment_search, container, false)
 
-        var button = binding.findViewById<Button>(R.id.fetch_categories_button)
-        var categoriesFetcher = CategoriesFetcher.getInstance()
-        button?.setOnClickListener {
-            Log.i("SearchFragment", "Button clicked")
-            categoriesFetcher.fetchCategories(
+        var dataFetcher = DataFetcher.getInstance()
+
+        var categoriesButton = binding.findViewById<Button>(R.id.fetch_categories_button)
+
+        categoriesButton?.setOnClickListener {
+            Log.i("SearchFragment", "Categories button clicked")
+            dataFetcher.fetchCategories(
                 success = { categories ->
                     Log.i("SearchFragment", "Categories count : ${categories.count()}")
                     for (category in categories) {
                         Log.i("SearchFragment", "Category : ${category.name}")
                     }
                 },
+                failure = { error ->
+                    Log.i("SearchFragment", "Error : $error")
+                }
+            )
+        }
+
+        var cocktailButton = binding.findViewById<Button>(R.id.fetch_cocktail_button)
+
+        cocktailButton?.setOnClickListener {
+            Log.i("SearchFragment", "Cocktail button clicked")
+            dataFetcher.fetchCocktailDetails(
+                11007,
+                success = { cocktail ->
+                Log.i("SearchFragment", cocktail.toString())
+            },
                 failure = { error ->
                     Log.i("SearchFragment", "Error : $error")
                 }
