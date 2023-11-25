@@ -2,30 +2,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.categories.CategoriesFragment"
-    >
+    tools:context=".ui.categories.CategoriesFragment">
 
-    <TextView
-        android:id="@+id/textview_selected_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nom de la catégorie sélectionnée"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:textColor="@color/white"/>
-
-    <Button
-        android:id="@+id/button_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:padding="8dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_categories"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/bar"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_gravity="top"/>
+
+
+    <LinearLayout
+        android:id="@+id/category_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/textview_selected_category"
-        />
+        android:textColor="@android:color/white"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="160dp">
+    </LinearLayout>
+
+
 
 </FrameLayout>
