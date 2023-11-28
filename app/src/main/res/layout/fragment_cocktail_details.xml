@@ -3,14 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Image -->
     <ImageView
         android:id="@+id/imageViewCocktail"
-        android:layout_width="337dp"
-        android:layout_height="138dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
@@ -21,8 +20,8 @@
         android:id="@+id/pop_up_cocktail_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageViewCocktail"
-        android:layout_marginTop="26dp"
+        android:layout_below="@id/imageViewCocktail"
+        android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         android:text="@string/pop_up_cocktail_name" />
 
@@ -30,35 +29,35 @@
         android:id="@+id/pop_up_cocktail_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pop_up_cocktail_name"
+        android:layout_below="@id/pop_up_cocktail_name"
         android:layout_marginTop="8dp"
-    android:layout_centerHorizontal="true"
-    android:text="@string/pop_up_cocktail_category" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/pop_up_cocktail_category" />
 
     <TextView
         android:id="@+id/pop_up_cocktail_served_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pop_up_cocktail_category"
+        android:layout_below="@id/pop_up_cocktail_category"
         android:layout_marginTop="8dp"
-    android:layout_centerHorizontal="true"
-    android:text="@string/pop_up_cocktail_served_in" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/pop_up_cocktail_served_in" />
 
     <TextView
         android:id="@+id/pop_up_cocktail_instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pop_up_cocktail_served_in"
+        android:layout_below="@id/pop_up_cocktail_served_in"
         android:layout_marginTop="8dp"
-    android:layout_centerHorizontal="true"
-    android:text="@string/pop_up_cocktail_instructions" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/pop_up_cocktail_instructions" />
 
     <TextView
         android:id="@+id/pop_up_cocktail_ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pop_up_cocktail_instructions"
+        android:layout_below="@id/pop_up_cocktail_instructions"
         android:layout_marginTop="8dp"
-    android:layout_centerHorizontal="true"
-    android:text="@string/pop_up_cocktail_ingredients" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/pop_up_cocktail_ingredients" />
 </RelativeLayout>

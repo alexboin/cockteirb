@@ -35,12 +35,13 @@ class CocktailDetailsFragment : DialogFragment() {
             ingredients: String
         ): CocktailDetailsFragment {
             val fragment = CocktailDetailsFragment()
-            val args = Bundle()
-            args.putString(COCKTAIL_NAME, name)
-            args.putString(COCKTAIL_CATEGORY, category)
-            args.putString(COCKTAIL_SERVED_IN, servedIn)
-            args.putString(COCKTAIL_INSTRUCTIONS, instructions)
-            args.putString(COCKTAIL_INGREDIENTS, ingredients)
+            val args = Bundle().apply {
+                putString(COCKTAIL_NAME, name)
+                putString(COCKTAIL_CATEGORY, category)
+                putString(COCKTAIL_SERVED_IN, servedIn)
+                putString(COCKTAIL_INSTRUCTIONS, instructions)
+                putString(COCKTAIL_INGREDIENTS, ingredients)
+            }
             fragment.arguments = args
             return fragment
         }
@@ -57,11 +58,11 @@ class CocktailDetailsFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val cocktailName = arguments?.getString(COCKTAIL_NAME, "")
-        val cocktailCategory = arguments?.getString(COCKTAIL_CATEGORY, "")
-        val cocktailServedIn = arguments?.getString(COCKTAIL_SERVED_IN, "")
-        val cocktailInstructions = arguments?.getString(COCKTAIL_INSTRUCTIONS, "")
-        val cocktailIngredients = arguments?.getString(COCKTAIL_INGREDIENTS, "")
+        val cocktailName = arguments?.getString(COCKTAIL_NAME) ?: ""
+        val cocktailCategory = arguments?.getString(COCKTAIL_CATEGORY) ?: ""
+        val cocktailServedIn = arguments?.getString(COCKTAIL_SERVED_IN) ?: ""
+        val cocktailInstructions = arguments?.getString(COCKTAIL_INSTRUCTIONS) ?: ""
+        val cocktailIngredients = arguments?.getString(COCKTAIL_INGREDIENTS) ?: ""
 
         view.findViewById<TextView>(R.id.pop_up_cocktail_name)?.text = cocktailName
         view.findViewById<TextView>(R.id.pop_up_cocktail_category)?.text = cocktailCategory
