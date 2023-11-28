@@ -135,6 +135,9 @@ class CocktailDeserializer : JsonDeserializer<Cocktail> {
         context: JsonDeserializationContext?
     ): Cocktail {
         body as JsonObject
+        if (body.get("drinks").isJsonNull) {
+            throw Exception("No cocktail was found with this id")
+        }
         val json = body.getAsJsonArray("drinks")[0].asJsonObject
 
         val id = json.get("idDrink").asString

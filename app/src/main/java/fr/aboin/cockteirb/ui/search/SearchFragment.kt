@@ -1,5 +1,6 @@
 package fr.aboin.cockteirb.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.widget.Button
 
 import fr.aboin.cockteirb.R
 import fr.aboin.cockteirb.core.service.DataFetcher
+import fr.aboin.cockteirb.ui.cocktail.CocktailDetailsActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,16 +85,20 @@ class SearchFragment : Fragment() {
         var cocktailButton = binding.findViewById<Button>(R.id.fetch_cocktail_button)
 
         cocktailButton?.setOnClickListener {
+            // Open CocktailDetailsActivity, passing the cocktail id 11007
             Log.i("SearchFragment", "Cocktail button clicked")
-            dataFetcher.fetchCocktailDetails(
-                11007,
-                success = { cocktail ->
-                Log.i("SearchFragment", cocktail.toString())
-            },
-                failure = { error ->
-                    Log.i("SearchFragment", "Error : $error")
-                }
-            )
+            val intent = Intent(activity, CocktailDetailsActivity::class.java)
+            intent.putExtra("cocktail_id", 11007)
+            startActivity(intent)
+        }
+
+        var nonExistantCocktailButton = binding.findViewById<Button>(R.id.fetch_non_existant_cocktail_button)
+
+        nonExistantCocktailButton?.setOnClickListener {
+            Log.i("SearchFragment", "Non existant cocktail button clicked")
+            val intent = Intent(activity, CocktailDetailsActivity::class.java)
+            intent.putExtra("cocktail_id", 404)
+            startActivity(intent)
         }
 
         return binding

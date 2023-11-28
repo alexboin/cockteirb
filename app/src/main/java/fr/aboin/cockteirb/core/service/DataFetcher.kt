@@ -88,9 +88,13 @@ class DataFetcher {
                         // Si succès
                         val gSon = GsonBuilder().registerTypeAdapter(Cocktail::class.java, CocktailDeserializer()).create()
                         val body = response.body?.string()
-                        val cocktail = gSon.fromJson(body, Cocktail::class.java)
-                        cocktails[id.toString()] = cocktail
-                        success(cocktail)
+                        try {
+                            val cocktail = gSon.fromJson(body, Cocktail::class.java)
+                            cocktails[id.toString()] = cocktail
+                            success(cocktail)
+                        } catch (e: Exception) {
+                            failure(Error(e.localizedMessage))
+                        }
                     }
                 })
         }

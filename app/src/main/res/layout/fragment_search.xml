@@ -31,7 +31,18 @@
         android:layout_marginTop="72dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Fetch cocktail" />
+        android:text="Fetch cocktail (11007)" />
+
+    <Button
+        android:id="@+id/fetch_non_existant_cocktail_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Fetch non-existant cocktail (404)" />
 
 
 
