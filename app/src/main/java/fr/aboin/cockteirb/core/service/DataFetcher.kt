@@ -1,11 +1,18 @@
 package fr.aboin.cockteirb.core.service
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import fr.aboin.cockteirb.core.model.CategoriesResponse
 import fr.aboin.cockteirb.core.model.Category
 import fr.aboin.cockteirb.core.model.Cocktail
 import fr.aboin.cockteirb.core.model.CocktailDeserializer
+import fr.aboin.cockteirb.core.model.CocktailInfo
+import fr.aboin.cockteirb.core.model.CocktailInfoDeserializer
+import fr.aboin.cockteirb.core.model.CocktailsInfoResponse
+import fr.aboin.cockteirb.core.model.CocktailsResponse
+import fr.aboin.cockteirb.core.model.SimpleCocktailDeserializer
 import okhttp3.OkHttpClient
+import java.io.IOException
 
 class DataFetcher {
     companion object {
@@ -21,13 +28,12 @@ class DataFetcher {
             }
             return instance!!
         }
-
     }
 
     // Cache
     private var categories: List<Category>? = null
     private var cocktails: HashMap<String, Cocktail> = HashMap()
-
+    private var cocktailsByCategory: HashMap<String, List<CocktailInfo>> = HashMap()
     fun fetchCategories(
         success: (List<Category>) -> Unit,
         failure: (Error) -> Unit
@@ -37,7 +43,6 @@ class DataFetcher {
             success(categories!!)
             return
         } else {
-            // Appel à OKHTTP
             val url = "$baseUrl/list.php?c=list"
             var request = okhttp3.Request.Builder().url(url).build()
 
@@ -45,12 +50,10 @@ class DataFetcher {
                 .newCall(request)
                 .enqueue(object : okhttp3.Callback {
                     override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
-                        // Si erreur
                         failure(Error(e.localizedMessage))
                     }
 
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                        // Si succès
                         val gson = com.google.gson.Gson()
                         val body = response.body?.string()
                         val categoriesResponse = gson.fromJson(body, CategoriesResponse::class.java)
@@ -61,7 +64,6 @@ class DataFetcher {
 
         }
     }
-
     fun fetchCocktailDetails(
         id: Int,
         success: (Cocktail) -> Unit,
@@ -69,10 +71,8 @@ class DataFetcher {
     ) {
         val cocktail = cocktails[id.toString()]
         if (cocktail != null) {
-            // Si cache
             success(cocktail)
         } else {
-            // Appel à OKHTTP
             val url = "$baseUrl/lookup.php?i=$id"
             var request = okhttp3.Request.Builder().url(url).build()
 
@@ -80,12 +80,10 @@ class DataFetcher {
                 .newCall(request)
                 .enqueue(object : okhttp3.Callback {
                     override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
-                        // Si erreur
                         failure(Error(e.localizedMessage))
                     }
 
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                        // Si succès
                         val gSon = GsonBuilder().registerTypeAdapter(Cocktail::class.java, CocktailDeserializer()).create()
                         val body = response.body?.string()
                         val cocktail = gSon.fromJson(body, Cocktail::class.java)
@@ -95,5 +93,48 @@ class DataFetcher {
                 })
         }
     }
+// TODO gerer le cas ou pas de connexion internet
+    fun fetchCocktailsByCategory(
+        category: String,
+        success: (List<CocktailInfo>) -> Unit,
+        failure: (Error) -> Unit
+    ) {
+        val cocktails = cocktailsByCategory[category]
+        if (cocktails != null) {
+            // If in cache, return the list
+            success(cocktails)
+        } else {
+            // Make an OKHTTP call
+            val url = "$baseUrl/filter.php?c=$category"
+            val request = okhttp3.Request.Builder().url(url).build()
 
+            val gson = GsonBuilder()
+                .registerTypeAdapter(CocktailInfo::class.java, CocktailInfoDeserializer())
+                .create()
+
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    failure(Error(e.localizedMessage))
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    // If success
+                    try {
+                        val body = response.body?.string()
+                        val cocktailsInfoResponse = gson.fromJson(body, CocktailsInfoResponse::class.java)
+                        val fetchedCocktails = cocktailsInfoResponse.cocktails
+                        if (fetchedCocktails != null) {
+                            // Update cocktailsByCategory to use CocktailInfo
+                            cocktailsByCategory[category] = fetchedCocktails
+                            success(fetchedCocktails)
+                        } else {
+                            failure(Error("No cocktails found for the category: $category"))
+                        }
+                    } catch (e: Exception) {
+                        failure(Error(e.localizedMessage))
+                    }
+                }
+            })
+        }
+    }
 }
