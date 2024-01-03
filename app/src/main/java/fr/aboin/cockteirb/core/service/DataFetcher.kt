@@ -10,6 +10,8 @@ import fr.aboin.cockteirb.core.model.CocktailInfo
 import fr.aboin.cockteirb.core.model.CocktailInfoDeserializer
 import fr.aboin.cockteirb.core.model.CocktailsInfoResponse
 import fr.aboin.cockteirb.core.model.CocktailsResponse
+import fr.aboin.cockteirb.core.model.Ingredient
+import fr.aboin.cockteirb.core.model.IngredientsResponse
 import fr.aboin.cockteirb.core.model.SimpleCocktailDeserializer
 import okhttp3.OkHttpClient
 import java.io.IOException
@@ -32,6 +34,7 @@ class DataFetcher {
 
     // Cache
     private var categories: List<Category>? = null
+    private var ingredients: List<Ingredient>? = null
     private var cocktails: HashMap<String, Cocktail> = HashMap()
     private var cocktailsByCategory: HashMap<String, List<CocktailInfo>> = HashMap()
     fun fetchCategories(
@@ -64,6 +67,42 @@ class DataFetcher {
 
         }
     }
+
+    fun fetchIngredients(
+        success: (List<Ingredient>) -> Unit,
+        failure: (Error) -> Unit
+    ) {
+        // Si cache
+        if (ingredients != null) {
+            success(ingredients!!)
+            return
+        } else {
+            val url = "$baseUrl/list.php?i=list"
+            var request = okhttp3.Request.Builder().url(url).build()
+
+            client
+                .newCall(request)
+                .enqueue(object : okhttp3.Callback {
+                    override fun onFailure(call: okhttp3.Call, e: IOException) {
+                        failure(Error(e.localizedMessage))
+                    }
+
+                    override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                        try {
+                            val gson = com.google.gson.Gson()
+                            val body = response.body?.string()
+                            val ingredientsResponse = gson.fromJson(body, IngredientsResponse::class.java)
+                            ingredients = ingredientsResponse.ingredients
+                            success(ingredientsResponse.ingredients)
+                        } catch (e: Exception) {
+                            failure(Error(e.localizedMessage))
+                        }
+                    }
+                })
+        }
+    }
+
+
     fun fetchCocktailDetails(
         id: Int,
         success: (Cocktail) -> Unit,
