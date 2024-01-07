@@ -15,27 +15,41 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
+/**
+ * A object representing a response from TheCocktailDB API
+ */
 data class ApiResponse<T>(
     @SerializedName("drinks")
     val drinks: List<T> = emptyList()
 )
 
+/**
+ * A wrapper around TheCocktailDB API
+ */
 class ApiWrapper private constructor() {
     private val client = OkHttpClient()
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(Cocktail::class.java, CocktailDeserializer())
         .create()
 
+    // Singleton
     companion object {
         val instance: ApiWrapper by lazy { ApiWrapper() }
         private const val baseUrl = "https://www.thecocktaildb.com/api/json/v1/1"
     }
 
+    // Cache
     private var categories: List<Category>? = null
     private var ingredients: List<Ingredient>? = null
     private var cocktails: HashMap<String, Cocktail> = HashMap()
     private var cocktailsByCategory: HashMap<String, List<CocktailSummary>> = HashMap()
 
+    /**
+     * Make a request to the API
+     * @param url The URL to request
+     * @param success The callback to call when the request is successful
+     * @param failure The callback to call when the request fails
+     */
     private fun makeApiRequest(
         url: String,
         success: (String) -> Unit,
@@ -59,10 +73,20 @@ class ApiWrapper private constructor() {
         })
     }
 
+    /**
+     * Parse the response from the API into a list of objects from the desired type
+     * @param json The JSON to parse
+     * @return The parsed response
+     */
     private inline fun <reified T> parseApiResponse(json: String): List<T> {
         return gson.fromJson<ApiResponse<T>>(json, TypeToken.getParameterized(ApiResponse::class.java, T::class.java).type).drinks.orEmpty()
     }
 
+    /**
+     * Fetch all the categories of cocktails from the API
+     * @param success The callback to call when the request is successful (with the list of categories)
+     * @param failure The callback to call when the request fails
+     */
     fun fetchCategories(
         success: (List<Category>) -> Unit,
         failure: (Error) -> Unit
@@ -78,6 +102,11 @@ class ApiWrapper private constructor() {
         }
     }
 
+    /**
+     * Fetch all the ingredients from the API
+     * @param success The callback to call when the request is successful (with the list of ingredients)
+     * @param failure The callback to call when the request fails
+     */
     fun fetchIngredients(
         success: (List<Ingredient>) -> Unit,
         failure: (Error) -> Unit
@@ -93,6 +122,12 @@ class ApiWrapper private constructor() {
         }
     }
 
+    /**
+     * Fetch the details of a cocktail from the API
+     * @param id The id of the cocktail to fetch
+     * @param success The callback to call when the request is successful (with the cocktail details)
+     * @param failure The callback to call when the request fails
+     */
     fun fetchCocktailDetails(
         id: Int,
         success: (Cocktail) -> Unit,
@@ -111,6 +146,12 @@ class ApiWrapper private constructor() {
         }
     }
 
+    /**
+     * Fetch all the cocktails of a category from the API
+     * @param category The category of the cocktails to fetch
+     * @param success The callback to call when the request is successful (with the list of cocktails)
+     * @param failure The callback to call when the request fails
+     */
     fun fetchCocktailsByCategory(
         category: String,
         success: (List<CocktailSummary>) -> Unit,
