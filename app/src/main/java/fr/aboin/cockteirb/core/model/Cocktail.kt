@@ -128,6 +128,62 @@ class Cocktail {
     }
 }
 
+class SimpleCocktailDeserializer : JsonDeserializer<Cocktail> {
+    override fun deserialize(
+        body: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Cocktail {
+        body as JsonObject
+
+        println(body)
+
+        val id = body.getAsJsonPrimitive("idDrink")?.asString ?: ""
+        print(id)
+        val title = body.getAsJsonPrimitive("strDrink")?.asString ?: ""
+        print(title)
+        val imageURL = body.getAsJsonPrimitive("strDrinkThumb")?.asString ?: ""
+        print(imageURL)
+
+
+        val alternateTitle: String? = null
+        val tags: List<String>? = null
+        val videoURL: String? = null
+        val category: String? = null
+        val iba: String? = null
+        val alcoholic: String? = null
+        val glass: String? = null
+        val instructions: HashMap<String, String>? = null
+        val ingredients: List<String>? = null
+        val measures: List<String>? = null
+        val imageSource: String? = null
+        val imageAttribution: String? = null
+        val creativeCommonsConfirmed: String? = null
+        val dateModified: String? = null
+
+        return Cocktail(
+            id,
+            title,
+            alternateTitle,
+            tags,
+            videoURL,
+            category,
+            iba,
+            alcoholic,
+            glass,
+            instructions,
+            imageURL,
+            ingredients,
+            measures,
+            imageSource,
+            imageAttribution,
+            creativeCommonsConfirmed,
+            dateModified
+        )
+    }
+}
+
+
 class CocktailDeserializer : JsonDeserializer<Cocktail> {
     override fun deserialize(
         body: JsonElement?,

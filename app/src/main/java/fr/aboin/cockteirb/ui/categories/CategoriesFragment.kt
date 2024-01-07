@@ -1,5 +1,5 @@
 package fr.aboin.cockteirb.ui.categories
-
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +13,7 @@ import fr.aboin.cockteirb.core.model.Category
 import fr.aboin.cockteirb.core.ui.CategoriesAdapter
 import fr.aboin.cockteirb.core.ui.CategoryButtonsViewHolder
 import fr.aboin.cockteirb.R
+import fr.aboin.cockteirb.core.service.DataFetcher
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -20,20 +21,6 @@ private const val ARG_PARAM2 = "param2"
 class CategoriesFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-
-    private val categories = listOf(
-        Category("Ordinary Drink"),
-        Category("Cocktail"),
-        Category("Milk / Float / Shake"),
-        Category("Other/Unknown"),
-        Category("Cocoa"),
-        Category("Shot"),
-        Category("Coffee / Tea"),
-        Category("Homemade Liqueur"),
-        Category("Punch / Party Drink"),
-        Category("Beer"),
-        Category("Soft Drink / Soda")
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,18 +52,37 @@ class CategoriesFragment : Fragment() {
         val categoryButtonsHolder = CategoryButtonsViewHolder(view)
         categoryButtonsHolder.categoryButtonsLayout.removeAllViews()
 
-        // Dynamically add buttons to the layout
-        for (category in categories) {
-            val button = Button(requireContext())
-            button.text = category.name
-            button.setOnClickListener {
-                Toast.makeText(requireContext(), "Button clicked for category: ${category.name}", Toast.LENGTH_SHORT).show()
+        val dataFetcher = DataFetcher.getInstance()
+
+        dataFetcher.fetchCategories(
+            success = { categories ->
+                // Run the UI-related code on the UI thread
+                activity?.runOnUiThread {
+                    // Dynamically add buttons to the layout
+                    for (category in categories) {
+                        val button = Button(requireContext())
+                        button.text = category.name
+                        button.setOnClickListener {
+                            val intent = Intent(requireContext(), CocktailsActivity::class.java)
+                            intent.putExtra(CocktailsActivity.CATEGORY_NAME_EXTRA, category.name)
+                            startActivity(intent)
+                        }
+                        categoryButtonsHolder.categoryButtonsLayout.addView(button)
+                    }
+                }
+            },
+            failure = { error ->
+                // Run the UI-related code on the UI thread
+                activity?.runOnUiThread {
+                    // Handle the error
+                    Toast.makeText(requireContext(), "Error fetching categories: ${error.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
             }
-            categoryButtonsHolder.categoryButtonsLayout.addView(button)
-        }
+        )
 
         return view
     }
+
 
     companion object {
         @JvmStatic
