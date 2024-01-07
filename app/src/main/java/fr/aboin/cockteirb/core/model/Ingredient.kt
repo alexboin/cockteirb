@@ -2,7 +2,7 @@ package fr.aboin.cockteirb.core.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Ingredient(
+class Ingredient {
     @SerializedName("strIngredient1")
-    val name: String
-)
+    var name: String? = null
+}

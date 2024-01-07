@@ -7,13 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import fr.aboin.cockteirb.core.model.Category
-import fr.aboin.cockteirb.core.ui.CategoriesAdapter
 import fr.aboin.cockteirb.core.ui.CategoryButtonsViewHolder
 import fr.aboin.cockteirb.R
-import fr.aboin.cockteirb.core.service.DataFetcher
+import fr.aboin.cockteirb.core.service.ApiWrapper
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -52,9 +48,9 @@ class CategoriesFragment : Fragment() {
         val categoryButtonsHolder = CategoryButtonsViewHolder(view)
         categoryButtonsHolder.categoryButtonsLayout.removeAllViews()
 
-        val dataFetcher = DataFetcher.getInstance()
+        val apiWrapper = ApiWrapper.getInstance()
 
-        dataFetcher.fetchCategories(
+        apiWrapper.fetchCategories(
             success = { categories ->
                 // Run the UI-related code on the UI thread
                 activity?.runOnUiThread {

@@ -9,8 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.aboin.cockteirb.R
-import fr.aboin.cockteirb.core.model.Ingredient
-import fr.aboin.cockteirb.core.service.DataFetcher
+import fr.aboin.cockteirb.core.service.ApiWrapper
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -47,9 +46,9 @@ class IngredientsFragment : Fragment() {
     }
 
     private fun fetchData() {
-        val dataFetcher = DataFetcher.getInstance()
+        val apiWrapper = ApiWrapper.getInstance()
 
-        dataFetcher.fetchIngredients(
+        apiWrapper.fetchIngredients(
             success = { ingredients ->
                 activity?.runOnUiThread {
                     ingredientsAdapter.setIngredients(ingredients)

@@ -1,6 +1,5 @@
 package fr.aboin.cockteirb.ui.cocktail
 
-import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.squareup.picasso.Picasso
 import fr.aboin.cockteirb.core.model.Cocktail
-import fr.aboin.cockteirb.core.service.DataFetcher
+import fr.aboin.cockteirb.core.service.ApiWrapper
 import fr.aboin.cockteirb.databinding.ActivityCocktailDetailsBinding
 
 class CocktailDetailsActivity : AppCompatActivity() {
@@ -41,7 +40,7 @@ class CocktailDetailsActivity : AppCompatActivity() {
                 alert.show()
             }
         } else {
-            DataFetcher.getInstance().fetchCocktailDetails(
+            ApiWrapper.getInstance().fetchCocktailDetails(
                 cocktailId,
                 success = { cocktail ->
                     this.cocktail = cocktail

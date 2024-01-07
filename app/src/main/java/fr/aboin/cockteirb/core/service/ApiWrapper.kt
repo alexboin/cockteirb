@@ -1,32 +1,32 @@
 package fr.aboin.cockteirb.core.service
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import fr.aboin.cockteirb.core.model.CategoriesResponse
+import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 import fr.aboin.cockteirb.core.model.Category
 import fr.aboin.cockteirb.core.model.Cocktail
 import fr.aboin.cockteirb.core.model.CocktailDeserializer
-import fr.aboin.cockteirb.core.model.CocktailInfo
-import fr.aboin.cockteirb.core.model.CocktailInfoDeserializer
-import fr.aboin.cockteirb.core.model.CocktailsInfoResponse
-import fr.aboin.cockteirb.core.model.CocktailsResponse
+import fr.aboin.cockteirb.core.model.CocktailSummary
 import fr.aboin.cockteirb.core.model.Ingredient
-import fr.aboin.cockteirb.core.model.IngredientsResponse
-import fr.aboin.cockteirb.core.model.SimpleCocktailDeserializer
 import okhttp3.OkHttpClient
 import java.io.IOException
 
-class DataFetcher {
+data class ApiResponse<T>(
+    @SerializedName("drinks")
+    val drinks: List<T> = emptyList()
+)
+
+class ApiWrapper {
     companion object {
         private val client = OkHttpClient()
         private const val baseUrl = "https://www.thecocktaildb.com/api/json/v1/1"
 
         // Singleton
-        private var instance: DataFetcher? = null
+        private var instance: ApiWrapper? = null
 
-        fun getInstance(): DataFetcher {
+        fun getInstance(): ApiWrapper {
             if (instance == null) {
-                instance = DataFetcher()
+                instance = ApiWrapper()
             }
             return instance!!
         }
@@ -36,7 +36,8 @@ class DataFetcher {
     private var categories: List<Category>? = null
     private var ingredients: List<Ingredient>? = null
     private var cocktails: HashMap<String, Cocktail> = HashMap()
-    private var cocktailsByCategory: HashMap<String, List<CocktailInfo>> = HashMap()
+    private var cocktailsByCategory: HashMap<String, List<CocktailSummary>> = HashMap()
+
     fun fetchCategories(
         success: (List<Category>) -> Unit,
         failure: (Error) -> Unit
@@ -59,9 +60,10 @@ class DataFetcher {
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                         val gson = com.google.gson.Gson()
                         val body = response.body?.string()
-                        val categoriesResponse = gson.fromJson(body, CategoriesResponse::class.java)
-                        categories = categoriesResponse.categories
-                        success(categoriesResponse.categories)
+                        val categoriesResponse = gson.fromJson<ApiResponse<Category>>(body, TypeToken.getParameterized(
+                            ApiResponse::class.java, Category::class.java).type)
+                        categories = categoriesResponse.drinks
+                        success(categoriesResponse.drinks)
                     }
                 })
 
@@ -91,9 +93,10 @@ class DataFetcher {
                         try {
                             val gson = com.google.gson.Gson()
                             val body = response.body?.string()
-                            val ingredientsResponse = gson.fromJson(body, IngredientsResponse::class.java)
-                            ingredients = ingredientsResponse.ingredients
-                            success(ingredientsResponse.ingredients)
+                            val ingredientsResponse = gson.fromJson<ApiResponse<Ingredient>>(body, TypeToken.getParameterized(
+                                ApiResponse::class.java, Ingredient::class.java).type)
+                            ingredients = ingredientsResponse.drinks
+                            success(ingredientsResponse.drinks)
                         } catch (e: Exception) {
                             failure(Error(e.localizedMessage))
                         }
@@ -138,9 +141,9 @@ class DataFetcher {
     }
 // TODO gerer le cas ou pas de connexion internet
     fun fetchCocktailsByCategory(
-        category: String,
-        success: (List<CocktailInfo>) -> Unit,
-        failure: (Error) -> Unit
+    category: String,
+    success: (List<CocktailSummary>) -> Unit,
+    failure: (Error) -> Unit
     ) {
         val cocktails = cocktailsByCategory[category]
         if (cocktails != null) {
@@ -151,9 +154,7 @@ class DataFetcher {
             val url = "$baseUrl/filter.php?c=$category"
             val request = okhttp3.Request.Builder().url(url).build()
 
-            val gson = GsonBuilder()
-                .registerTypeAdapter(CocktailInfo::class.java, CocktailInfoDeserializer())
-                .create()
+            val gson = GsonBuilder().create()
 
             client.newCall(request).enqueue(object : okhttp3.Callback {
                 override fun onFailure(call: okhttp3.Call, e: IOException) {
@@ -164,8 +165,10 @@ class DataFetcher {
                     // If success
                     try {
                         val body = response.body?.string()
-                        val cocktailsInfoResponse = gson.fromJson(body, CocktailsInfoResponse::class.java)
-                        val fetchedCocktails = cocktailsInfoResponse.cocktails
+
+                        val cocktailsResponse = gson.fromJson<ApiResponse<CocktailSummary>>(body, TypeToken.getParameterized(
+                            ApiResponse::class.java, CocktailSummary::class.java).type)
+                        val fetchedCocktails = cocktailsResponse.drinks
                         if (fetchedCocktails != null) {
                             // Update cocktailsByCategory to use CocktailInfo
                             cocktailsByCategory[category] = fetchedCocktails

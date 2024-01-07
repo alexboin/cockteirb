@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.aboin.cockteirb.R
-import fr.aboin.cockteirb.core.model.CocktailInfo
-import fr.aboin.cockteirb.core.service.DataFetcher
+import fr.aboin.cockteirb.core.model.CocktailSummary
+import fr.aboin.cockteirb.core.service.ApiWrapper
 
 
 class CocktailsActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class CocktailsActivity : AppCompatActivity() {
     }
 
     private lateinit var category: String
-    private lateinit var dataFetcher: DataFetcher
+    private lateinit var apiWrapper: ApiWrapper
     private lateinit var cocktailsAdapter: CocktailsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ class CocktailsActivity : AppCompatActivity() {
         category = intent.getStringExtra(CATEGORY_NAME_EXTRA) ?: ""
 
         // Initialize the DataFetcher
-        dataFetcher = DataFetcher.getInstance()
+        apiWrapper = ApiWrapper.getInstance()
 
         // Initialize the adapter
         cocktailsAdapter = CocktailsAdapter()
@@ -42,9 +42,9 @@ class CocktailsActivity : AppCompatActivity() {
     }
 
     private fun loadCocktails() {
-        dataFetcher.fetchCocktailsByCategory(
+        apiWrapper.fetchCocktailsByCategory(
             category = category,
-            success = { cocktails: List<CocktailInfo> ->
+            success = { cocktails: List<CocktailSummary> ->
                 runOnUiThread {
                     cocktailsAdapter.setCocktails(cocktails)
                 }

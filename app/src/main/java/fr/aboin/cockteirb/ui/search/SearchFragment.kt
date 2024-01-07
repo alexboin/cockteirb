@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 
 import fr.aboin.cockteirb.R
-import fr.aboin.cockteirb.core.service.DataFetcher
+import fr.aboin.cockteirb.core.service.ApiWrapper
 import fr.aboin.cockteirb.ui.cocktail.CocktailDetailsActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -63,13 +63,13 @@ class SearchFragment : Fragment() {
 
         var binding = inflater.inflate(R.layout.fragment_search, container, false)
 
-        var dataFetcher = DataFetcher.getInstance()
+        var apiWrapper = ApiWrapper.getInstance()
 
         var categoriesButton = binding.findViewById<Button>(R.id.fetch_categories_button)
 
         categoriesButton?.setOnClickListener {
             Log.i("SearchFragment", "Categories button clicked")
-            dataFetcher.fetchCategories(
+            apiWrapper.fetchCategories(
                 success = { categories ->
                     Log.i("SearchFragment", "Categories count : ${categories.count()}")
                     for (category in categories) {

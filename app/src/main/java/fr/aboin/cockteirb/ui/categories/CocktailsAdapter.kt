@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import fr.aboin.cockteirb.R
-import fr.aboin.cockteirb.core.model.CocktailInfo
+import fr.aboin.cockteirb.core.model.CocktailSummary
 
 class CocktailsAdapter : RecyclerView.Adapter<CocktailsAdapter.CocktailViewHolder>() {
 
-    private var cocktails: List<CocktailInfo> = emptyList()
+    private var cocktails: List<CocktailSummary> = emptyList()
 
-    fun setCocktails(cocktails: List<CocktailInfo>) {
+    fun setCocktails(cocktails: List<CocktailSummary>) {
         this.cocktails = cocktails
         notifyDataSetChanged()
     }
@@ -37,9 +37,9 @@ class CocktailsAdapter : RecyclerView.Adapter<CocktailsAdapter.CocktailViewHolde
         private val cocktailImageView: ImageView = itemView.findViewById(R.id.cocktailImageView)
         private val cocktailNameTextView: TextView = itemView.findViewById(R.id.cocktailNameTextView)
 
-        fun bind(cocktail: CocktailInfo) {
-            Picasso.get().load(cocktail.strDrinkThumb).into(cocktailImageView)
-            cocktailNameTextView.text = cocktail.strDrink
+        fun bind(cocktail: CocktailSummary) {
+            Picasso.get().load(cocktail.imageURL).into(cocktailImageView)
+            cocktailNameTextView.text = cocktail.title
         }
     }
 }
