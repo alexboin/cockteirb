@@ -40,7 +40,7 @@ class CocktailDetailsActivity : AppCompatActivity() {
                 alert.show()
             }
         } else {
-            ApiWrapper.getInstance().fetchCocktailDetails(
+            ApiWrapper.instance.fetchCocktailDetails(
                 cocktailId,
                 success = { cocktail ->
                     this.cocktail = cocktail

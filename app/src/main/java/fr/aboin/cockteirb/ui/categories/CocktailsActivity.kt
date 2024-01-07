@@ -27,7 +27,7 @@ class CocktailsActivity : AppCompatActivity() {
         category = intent.getStringExtra(CATEGORY_NAME_EXTRA) ?: ""
 
         // Initialize the DataFetcher
-        apiWrapper = ApiWrapper.getInstance()
+        apiWrapper = ApiWrapper.instance
 
         // Initialize the adapter
         cocktailsAdapter = CocktailsAdapter()

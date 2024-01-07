@@ -48,7 +48,7 @@ class CategoriesFragment : Fragment() {
         val categoryButtonsHolder = CategoryButtonsViewHolder(view)
         categoryButtonsHolder.categoryButtonsLayout.removeAllViews()
 
-        val apiWrapper = ApiWrapper.getInstance()
+        val apiWrapper = ApiWrapper.instance
 
         apiWrapper.fetchCategories(
             success = { categories ->

@@ -6,6 +6,9 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
 
+/**
+ * A object representing a cocktail with all its details (when getting a cocktail by id)
+ */
 class Cocktail : CocktailSummary {
     var alternateTitle: String? = null
     var tags: List<String>? = null

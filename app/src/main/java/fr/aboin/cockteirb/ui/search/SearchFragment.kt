@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
 
         var binding = inflater.inflate(R.layout.fragment_search, container, false)
 
-        var apiWrapper = ApiWrapper.getInstance()
+        var apiWrapper = ApiWrapper.instance
 
         var categoriesButton = binding.findViewById<Button>(R.id.fetch_categories_button)
 

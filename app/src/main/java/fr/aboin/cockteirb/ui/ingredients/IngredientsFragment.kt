@@ -46,7 +46,7 @@ class IngredientsFragment : Fragment() {
     }
 
     private fun fetchData() {
-        val apiWrapper = ApiWrapper.getInstance()
+        val apiWrapper = ApiWrapper.instance
 
         apiWrapper.fetchIngredients(
             success = { ingredients ->
