@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ComposeView
 import fr.aboin.cockteirb.core.model.CocktailSummary
 import fr.aboin.cockteirb.core.service.ApiWrapper
-import fr.aboin.cockteirb.ui.categories.CocktailsAdapter
 import fr.aboin.cockteirb.ui.components.CocktailCardList
 import fr.aboin.cockteirb.ui.components.ErrorScreen
 import fr.aboin.cockteirb.ui.components.LoadingScreen
@@ -26,7 +25,6 @@ class CocktailListActivity : AppCompatActivity() {
         const val SEARCH_TERM_EXTRA = "search_term"
     }
 
-    private lateinit var cocktailsAdapter: CocktailsAdapter
     private lateinit var composeView: ComposeView
 
     override fun onCreate(savedInstanceState: Bundle?) {

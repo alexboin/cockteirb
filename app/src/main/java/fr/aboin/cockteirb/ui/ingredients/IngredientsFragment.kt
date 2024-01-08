@@ -1,18 +1,21 @@
 package fr.aboin.cockteirb.ui.ingredients
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import fr.aboin.cockteirb.R
+import com.google.android.material.snackbar.Snackbar
 import fr.aboin.cockteirb.core.service.ApiWrapper
+import fr.aboin.cockteirb.ui.cocktail.CocktailListActivity
+import fr.aboin.cockteirb.ui.cocktail.CocktailSearchType
+import fr.aboin.cockteirb.ui.components.IngredientCardList
+import fr.aboin.cockteirb.ui.components.LoadingScreen
 
 class IngredientsFragment : Fragment() {
-    private lateinit var ingredientsAdapter: IngredientsAdapter
+    private lateinit var composeView: ComposeView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,34 +25,40 @@ class IngredientsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_ingredients, container, false)
-
-        val recycler_view_ingredients = view.findViewById<RecyclerView>(R.id.recycler_view_ingredients)
-        recycler_view_ingredients.layoutManager = LinearLayoutManager(context)
-
-        ingredientsAdapter = IngredientsAdapter()
-        recycler_view_ingredients.adapter = ingredientsAdapter
+        composeView = ComposeView(requireContext())
+        composeView.setContent {
+            LoadingScreen()
+        }
 
         fetchData()
 
-        return view
+        return composeView
     }
 
     private fun fetchData() {
         ApiWrapper.instance.fetchIngredients(
             success = { ingredients ->
-                activity?.runOnUiThread {
-                    ingredientsAdapter.setIngredients(ingredients)
+                val ingredientsNames = ingredients.map { i -> i.name ?: "" }
+
+                composeView.setContent {
+                    IngredientCardList(
+                        title = "Ingredients list",
+                        ingredients = ingredientsNames,
+                        onClickIngredient = { ingredientsName ->
+                            val intent = Intent(requireContext(), CocktailListActivity::class.java)
+                            intent.putExtra(
+                                CocktailListActivity.SEARCH_TYPE_EXTRA,
+                                CocktailSearchType.ByIngredient.name
+                            )
+                            intent.putExtra(CocktailListActivity.SEARCH_TERM_EXTRA, ingredientsName)
+                            startActivity(intent)
+                        }
+                    )
                 }
             },
             failure = { error ->
                 activity?.runOnUiThread {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error fetching ingredients: ${error.localizedMessage}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(composeView, "Error while fetching ingredients: ${error.localizedMessage}", Snackbar.LENGTH_LONG).show()
                 }
             }
         )

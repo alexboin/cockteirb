@@ -56,9 +56,9 @@ class CocktailDetailsActivity : AppCompatActivity() {
                     this.isFavorite = FavoriteManager.getInstance(this).isFavorite(cocktail.id.toString())
                     runOnUiThread {
                         if (isFavorite) {
-                            binding.favoriteButton.setImageResource(R.drawable.outline_star_filled_24)
+                            binding.favoriteButton.setImageResource(R.drawable.star_icon_filled)
                         } else {
-                            binding.favoriteButton.setImageResource(R.drawable.outline_star_outline_24)
+                            binding.favoriteButton.setImageResource(R.drawable.star_icon)
                         }
                     }
 
@@ -66,13 +66,13 @@ class CocktailDetailsActivity : AppCompatActivity() {
                         if (isFavorite) {
                             FavoriteManager.getInstance(this).removeFavoriteCocktail(cocktail.id.toString())
                             runOnUiThread {
-                                binding.favoriteButton.setImageResource(R.drawable.outline_star_outline_24)
+                                binding.favoriteButton.setImageResource(R.drawable.star_icon)
                                 Snackbar.make(binding.root, "Removed from favorites", Snackbar.LENGTH_SHORT).show()
                             }
                         } else {
                             FavoriteManager.getInstance(this).addFavoriteCocktail(cocktail.id.toString())
                             runOnUiThread {
-                                binding.favoriteButton.setImageResource(R.drawable.outline_star_filled_24)
+                                binding.favoriteButton.setImageResource(R.drawable.star_icon_filled)
                                 Snackbar.make(binding.root, "Added to favorites", Snackbar.LENGTH_SHORT).show()
                             }
                         }
@@ -102,9 +102,6 @@ class CocktailDetailsActivity : AppCompatActivity() {
                         }?.joinToString(separator = "")
 
                         binding.ingredientsValueTextView.text = ingredientsText
-
-                        // TODO: Use the adapter to display the ingredients (not working)
-                        binding.ingredientsRecyclerView.adapter = IngredientAdapter(this, cocktail)
 
                         binding.ctrlMainLayout.visibility = View.VISIBLE
                         binding.ctrlActivityIndicator.visibility = View.GONE

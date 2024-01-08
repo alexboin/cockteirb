@@ -8,7 +8,7 @@ import com.google.android.material.tabs.TabLayout
 import fr.aboin.cockteirb.ui.categories.CategoriesFragment
 import fr.aboin.cockteirb.ui.cocktail.CocktailDetailsActivity
 import fr.aboin.cockteirb.ui.ingredients.IngredientsFragment
-import fr.aboin.cockteirb.ui.search.SearchFragment
+import fr.aboin.cockteirb.ui.explore.ExploreFragment
 
 class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         selectedTabPosition = 0
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container_view, SearchFragment.newInstance())
+            .replace(R.id.fragment_container_view, ExploreFragment.newInstance())
             .commit()
     }
 

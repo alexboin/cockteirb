@@ -27,9 +27,9 @@
                 android:id="@+id/imageViewCocktail"
                 android:layout_width="match_parent"
                 android:layout_height="256dp"
-                android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bar" />
+                android:src="@drawable/bar"
+                android:contentDescription="Cocktail picture" />
 
             <TextView
                 android:id="@+id/titleTextView"
@@ -123,14 +123,6 @@
                 android:layout_marginTop="16dp"
                 android:text="Ingredients text"
                 android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ingredientsRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp"
-                tools:listitem="@layout/item_ingredient_and_quantity" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -142,7 +134,8 @@
         android:layout_marginEnd="16dp"
         app:layout_anchor="@id/imageViewCocktail"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/outline_star_outline_24" />
+        app:srcCompat="@drawable/star_icon"
+        android:contentDescription="Add or remove from favorites" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
