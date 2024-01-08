@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NoContentScreen(
     message: String = "No results",
-    onGoBack: () -> Unit
+    onGoBack: () -> Unit,
+    showGoBackButton: Boolean = true,
 ) {
     Column(
         modifier = Modifier
@@ -50,19 +51,21 @@ fun NoContentScreen(
                 .padding(top = 8.dp)
                 .align(alignment = Alignment.CenterHorizontally)
         )
-        Button(
-            onClick = onGoBack,
-            modifier = Modifier
-                .align(alignment = Alignment.CenterHorizontally)
-                .padding(top = 24.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = "Go back",
+        if (showGoBackButton) {
+            Button(
+                onClick = onGoBack,
                 modifier = Modifier
-                    .size(24.dp)
-            )
-            Text(text = "Go back", modifier = Modifier.padding(start = 8.dp))
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .padding(top = 24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ArrowBack,
+                    contentDescription = "Go back",
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+                Text(text = "Go back", modifier = Modifier.padding(start = 8.dp))
+            }
         }
     }
 }

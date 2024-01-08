@@ -19,14 +19,17 @@ import coil.compose.rememberAsyncImagePainter
 import fr.aboin.cockteirb.core.model.CocktailSummary
 
 @Composable
-fun CocktailCardList(title: String, cocktails: List<CocktailSummary>, onClickCocktail: (id: String) -> Unit) {
+fun CocktailCardList(title: String?, cocktails: List<CocktailSummary>, onClickCocktail: (id: String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        CocktailCardListHeader(title)
+        if (title != null) CocktailCardListHeader(title)
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(160.dp)) {
+            columns = GridCells.Adaptive(160.dp),
+            modifier = Modifier
+                .padding(bottom = if (title != null) 0.dp else 80.dp)
+        ) {
             items(cocktails.size) { index ->
                 CocktailCard(cocktails[index], onClickCocktail)
             }
