@@ -2,14 +2,16 @@ package fr.aboin.cockteirb.ui.cocktail
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import fr.aboin.cockteirb.R
+import androidx.compose.ui.platform.ComposeView
 import fr.aboin.cockteirb.core.model.CocktailSummary
 import fr.aboin.cockteirb.core.service.ApiWrapper
 import fr.aboin.cockteirb.ui.categories.CocktailsAdapter
+import fr.aboin.cockteirb.ui.components.CocktailCardList
+import fr.aboin.cockteirb.ui.components.ErrorScreen
+import fr.aboin.cockteirb.ui.components.LoadingScreen
+import fr.aboin.cockteirb.ui.components.NoContentScreen
 
 enum class CocktailSearchType {
     ByName,
@@ -25,57 +27,95 @@ class CocktailListActivity : AppCompatActivity() {
     }
 
     private lateinit var cocktailsAdapter: CocktailsAdapter
+    private lateinit var composeView: ComposeView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cocktail_list)
+        composeView = ComposeView(this)
+        setContentView(composeView)
+
+        // Display the loading screen
+        runOnUiThread { setContent { LoadingScreen() } }
 
         // Retrieve the type of search to perform and the search term
-        val searchType: CocktailSearchType = CocktailSearchType.valueOf(intent.getStringExtra(SEARCH_TYPE_EXTRA) ?: "")
-        val searchTerm: String = intent.getStringExtra(SEARCH_TERM_EXTRA) ?: ""
+        val searchType: CocktailSearchType =
+            CocktailSearchType.valueOf(intent.getStringExtra(SEARCH_TYPE_EXTRA) ?: "")
+        val searchTerm: String = (intent.getStringExtra(SEARCH_TERM_EXTRA) ?: "").trim()
 
-        val textView: TextView = findViewById(R.id.textView)
-
-        when (searchType) {
-            CocktailSearchType.ByName -> textView.text = "Cocktails matching \"$searchTerm\""
-            CocktailSearchType.ByCategory -> textView.text = "Cocktails in category \"$searchTerm\""
-            CocktailSearchType.ByIngredient -> textView.text = "Cocktails containing \"$searchTerm\""
+        val title = when (searchType) {
+            CocktailSearchType.ByName -> "Cocktails matching \"$searchTerm\" :"
+            CocktailSearchType.ByCategory -> "Cocktails in category \"$searchTerm\" :"
+            CocktailSearchType.ByIngredient -> "Cocktails containing \"$searchTerm\" :"
         }
 
-        // Initialize the adapter
-        cocktailsAdapter = CocktailsAdapter { cocktail ->
-            // Handle the click on a cocktail
-            val intent = Intent(this, CocktailDetailsActivity::class.java)
-            intent.putExtra(CocktailDetailsActivity.COCKTAIL_ID_EXTRA, cocktail.id)
-            startActivity(intent)
-        }
-
-        // Configure the RecyclerView
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view_cocktails)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = cocktailsAdapter
-
-        // Load the cocktails for the specified category
-        loadCocktails(searchType, searchTerm)
+        // Load the cocktails
+        loadCocktails(title, searchType, searchTerm)
     }
 
-    private fun loadCocktails(searchType: CocktailSearchType, searchTerm: String) {
-        val successCallback = { cocktails: List<CocktailSummary> ->
-            runOnUiThread {
-                cocktailsAdapter.setCocktails(cocktails)
-            }
-        }
-
+    private fun loadCocktails(title: String, searchType: CocktailSearchType, searchTerm: String) {
         val errorCallback = { error: Error ->
             runOnUiThread {
-                // Handle the error TODO
+                setContent {
+                    ErrorScreen(error.message ?: "Error") {
+                        loadCocktails(
+                            title,
+                            searchType,
+                            searchTerm
+                        )
+                    }
+                }
             }
         }
 
+        val successCallback = { cocktails: List<CocktailSummary> ->
+            runOnUiThread {
+                if (cocktails.isEmpty()) {
+                    val message = when (searchType) {
+                        CocktailSearchType.ByName -> "Try to change your keywords"
+                        CocktailSearchType.ByCategory -> "This category does not contain any cocktail"
+                        CocktailSearchType.ByIngredient -> "This ingredient isn't used in any cocktail"
+                    }
+
+                    setContent {
+                        NoContentScreen(
+                            message,
+                            onGoBack ={ finish() }
+                        )
+                    }
+                } else {
+                    setContent {
+                        CocktailCardList(title, cocktails) { cocktailId ->
+                            val intent = Intent(this, CocktailDetailsActivity::class.java)
+                            intent.putExtra(CocktailDetailsActivity.COCKTAIL_ID_EXTRA, cocktailId)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+        }
+
+        // Display the loading screen
+        runOnUiThread { setContent { LoadingScreen() } }
+
+        // Then load the cocktails according to the search type and term
         when (searchType) {
-            CocktailSearchType.ByName -> ApiWrapper.instance.fetchCocktailsByName(searchTerm, successCallback, errorCallback)
-            CocktailSearchType.ByCategory -> ApiWrapper.instance.fetchCocktailsByCategory(searchTerm, successCallback, errorCallback)
-            CocktailSearchType.ByIngredient -> ApiWrapper.instance.fetchCocktailsByIngredient(searchTerm, successCallback, errorCallback)
+            CocktailSearchType.ByName -> ApiWrapper.instance.fetchCocktailsByName(
+                searchTerm,
+                successCallback,
+                errorCallback
+            )
+
+            CocktailSearchType.ByCategory -> ApiWrapper.instance.fetchCocktailsByCategory(
+                searchTerm,
+                successCallback,
+                errorCallback
+            )
+
+            CocktailSearchType.ByIngredient -> ApiWrapper.instance.fetchCocktailsByIngredient(
+                searchTerm,
+                successCallback,
+                errorCallback
+            )
         }
     }
 }

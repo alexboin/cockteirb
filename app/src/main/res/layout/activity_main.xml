@@ -24,20 +24,26 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/outline_search_24"
-            android:text="@string/tab_search" />
+            android:icon="@drawable/cocktail_icon"
+            android:text="@string/tab_explore" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/outline_category_24"
+            android:icon="@drawable/categories_icon"
             android:text="@string/tab_categories" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/outline_receipt_long_24"
+            android:icon="@drawable/ingredients_icon"
             android:text="@string/tab_ingredients" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/random_icon"
+            android:text="@string/tab_random" />
     </com.google.android.material.tabs.TabLayout>
 
 
