@@ -129,11 +129,11 @@ class ApiWrapper private constructor() {
      * @param failure The callback to call when the request fails
      */
     fun fetchCocktailDetails(
-        id: Int,
+        id: String,
         success: (Cocktail) -> Unit,
         failure: (Error) -> Unit
     ) {
-        val cocktail = cocktails[id.toString()]
+        val cocktail = cocktails[id]
         if (cocktail != null) {
             success(cocktail)
         } else {
@@ -168,5 +168,41 @@ class ApiWrapper private constructor() {
                 success(fetchedCocktails)
             }, failure)
         }
+    }
+
+    /**
+     * Fetch all the cocktails matching a name from the API
+     * @param name The name of the cocktails to fetch
+     * @param success The callback to call when the request is successful (with the list of cocktails)
+     * @param failure The callback to call when the request fails
+     */
+    fun fetchCocktailsByName(
+        name: String,
+        success: (List<CocktailSummary>) -> Unit,
+        failure: (Error) -> Unit
+    ) {
+        val url = "$baseUrl/search.php?s=$name"
+        makeApiRequest(url, { body ->
+            val fetchedCocktails = parseApiResponse<CocktailSummary>(body)
+            success(fetchedCocktails)
+        }, failure)
+    }
+
+    /**
+     * Fetch all the cocktails containing an ingredient from the API
+     * @param ingredient The ingredient of the cocktails to fetch
+     * @param success The callback to call when the request is successful (with the list of cocktails)
+     * @param failure The callback to call when the request fails
+     */
+    fun fetchCocktailsByIngredient(
+        ingredient: String,
+        success: (List<CocktailSummary>) -> Unit,
+        failure: (Error) -> Unit
+    ) {
+        val url = "$baseUrl/filter.php?i=$ingredient"
+        makeApiRequest(url, { body ->
+            val fetchedCocktails = parseApiResponse<CocktailSummary>(body)
+            success(fetchedCocktails)
+        }, failure)
     }
 }

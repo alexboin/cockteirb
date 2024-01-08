@@ -10,7 +10,9 @@ import com.squareup.picasso.Picasso
 import fr.aboin.cockteirb.R
 import fr.aboin.cockteirb.core.model.CocktailSummary
 
-class CocktailsAdapter : RecyclerView.Adapter<CocktailsAdapter.CocktailViewHolder>() {
+class CocktailsAdapter(
+    private val callback: ((CocktailSummary) -> Unit)? = null
+) : RecyclerView.Adapter<CocktailsAdapter.CocktailViewHolder>() {
 
     private var cocktails: List<CocktailSummary> = emptyList()
 
@@ -20,13 +22,12 @@ class CocktailsAdapter : RecyclerView.Adapter<CocktailsAdapter.CocktailViewHolde
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CocktailViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_cocktail, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cocktail, parent, false)
         return CocktailViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
-        holder.bind(cocktails[position])
+        holder.bind(cocktails[position], callback)
     }
 
     override fun getItemCount(): Int {
@@ -37,9 +38,12 @@ class CocktailsAdapter : RecyclerView.Adapter<CocktailsAdapter.CocktailViewHolde
         private val cocktailImageView: ImageView = itemView.findViewById(R.id.cocktailImageView)
         private val cocktailNameTextView: TextView = itemView.findViewById(R.id.cocktailNameTextView)
 
-        fun bind(cocktail: CocktailSummary) {
+        fun bind(cocktail: CocktailSummary, callback: ((CocktailSummary) -> Unit)?) {
             Picasso.get().load(cocktail.imageURL).into(cocktailImageView)
             cocktailNameTextView.text = cocktail.title
+            cocktailImageView.setOnClickListener() {
+                callback?.invoke(cocktail)
+            }
         }
     }
 }

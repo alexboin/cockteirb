@@ -14,6 +14,10 @@ import fr.aboin.cockteirb.databinding.ActivityCocktailDetailsBinding
 
 class CocktailDetailsActivity : AppCompatActivity() {
 
+    companion object {
+        const val COCKTAIL_ID_EXTRA = "cocktail_id"
+    }
+
     private lateinit var binding: ActivityCocktailDetailsBinding
 
     private var cocktail: Cocktail? = null
@@ -28,11 +32,11 @@ class CocktailDetailsActivity : AppCompatActivity() {
         binding.ctrlActivityIndicator.visibility = View.VISIBLE
 
         // Get extras from the intent
-        val cocktailId = intent.getIntExtra("cocktail_id", -1)
+        val cocktailId = intent.getStringExtra(COCKTAIL_ID_EXTRA)
 
         // If the cocktailId is -1, we don't have a cocktailId, so we can't display the details
         // Show an error message in a dialog
-        if (cocktailId == -1) {
+        if (cocktailId == null) {
             val alert = AlertDialog.Builder(this)
             alert.setTitle("Error")
             alert.setCancelable(false)

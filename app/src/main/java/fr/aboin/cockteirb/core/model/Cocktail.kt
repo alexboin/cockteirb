@@ -104,7 +104,7 @@ class CocktailDeserializer : JsonDeserializer<Cocktail> {
 
         for ((key, value) in instructionsMapping) {
             if (!json.get(key).isJsonNull) {
-                instructions[value] = json.get(key).asString
+                instructions[value] = json.get(key).asString.trim()
             }
         }
 
@@ -116,10 +116,10 @@ class CocktailDeserializer : JsonDeserializer<Cocktail> {
         // For loop to add ingredients and measures to the lists
         for (i in 1..15) {
             if (!json.get("strIngredient$i").isJsonNull) {
-                ingredients.add(json.get("strIngredient$i").asString)
+                ingredients.add(json.get("strIngredient$i").asString.trim())
             }
             if (!json.get("strMeasure$i").isJsonNull) {
-                measures.add(json.get("strMeasure$i").asString)
+                measures.add(json.get("strMeasure$i").asString.trim())
             }
         }
 

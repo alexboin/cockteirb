@@ -25,21 +25,21 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     private fun displaySearchFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container_view, SearchFragment.newInstance("hello", "world"))
+            .replace(R.id.fragment_container_view, SearchFragment.newInstance())
             .commit()
     }
 
     private fun displayCategoriesFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container_view, CategoriesFragment.newInstance("hello", "world"))
+            .replace(R.id.fragment_container_view, CategoriesFragment.newInstance())
             .commit()
     }
 
     private fun displayIngredientsFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container_view, IngredientsFragment.newInstance("hello", "world"))
+            .replace(R.id.fragment_container_view, IngredientsFragment.newInstance())
             .commit()
     }
 

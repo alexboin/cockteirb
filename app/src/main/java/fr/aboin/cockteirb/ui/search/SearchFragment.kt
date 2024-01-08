@@ -15,17 +15,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import fr.aboin.cockteirb.R
 import fr.aboin.cockteirb.core.service.ApiWrapper
 import fr.aboin.cockteirb.ui.cocktail.CocktailDetailsActivity
+import fr.aboin.cockteirb.ui.cocktail.CocktailListActivity
+import fr.aboin.cockteirb.ui.cocktail.CocktailSearchType
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -33,10 +25,6 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -91,7 +79,7 @@ class SearchFragment : Fragment() {
             // Open CocktailDetailsActivity, passing the cocktail id 11007
             Log.i("SearchFragment", "Cocktail button clicked")
             val intent = Intent(activity, CocktailDetailsActivity::class.java)
-            intent.putExtra("cocktail_id", 11007)
+            intent.putExtra(CocktailDetailsActivity.COCKTAIL_ID_EXTRA, "11007")
             startActivity(intent)
         }
 
@@ -100,7 +88,7 @@ class SearchFragment : Fragment() {
         nonExistantCocktailButton?.setOnClickListener {
             Log.i("SearchFragment", "Non existant cocktail button clicked")
             val intent = Intent(activity, CocktailDetailsActivity::class.java)
-            intent.putExtra("cocktail_id", 404)
+            intent.putExtra(CocktailDetailsActivity.COCKTAIL_ID_EXTRA, "404")
             startActivity(intent)
         }
 
@@ -110,17 +98,19 @@ class SearchFragment : Fragment() {
         }
 
         val searchView: SearchView = binding.findViewById(R.id.searchView)
+
         // Set up SearchView listener or perform actions as needed
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Handle search query submission
-                Log.i("SearchFragment", "Search query submitted: $query")
+                val intent = Intent(activity, CocktailListActivity::class.java)
+                intent.putExtra(CocktailListActivity.SEARCH_TYPE_EXTRA, CocktailSearchType.ByName.name)
+                intent.putExtra(CocktailListActivity.SEARCH_TERM_EXTRA, query)
+                startActivity(intent)
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                // Handle search query text change
-                Log.i("SearchFragment", "Search query text changed: $newText")
+            override fun onQueryTextChange(p0: String?): Boolean {
+                // Do nothing
                 return true
             }
         })
@@ -129,22 +119,7 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = SearchFragment()
     }
 }
