@@ -54,26 +54,7 @@ class SearchFragment : Fragment() {
 
         var binding = inflater.inflate(R.layout.fragment_search, container, false)
 
-        var apiWrapper = ApiWrapper.instance
-
-        var categoriesButton = binding.findViewById<Button>(R.id.button1)
-
-        categoriesButton?.setOnClickListener {
-            Log.i("SearchFragment", "Categories button clicked")
-            apiWrapper.fetchCategories(
-                success = { categories ->
-                    Log.i("SearchFragment", "Categories count : ${categories.count()}")
-                    for (category in categories) {
-                        Log.i("SearchFragment", "Category : ${category.name}")
-                    }
-                },
-                failure = { error ->
-                    Log.i("SearchFragment", "Error : $error")
-                }
-            )
-        }
-
-        var cocktailButton = binding.findViewById<Button>(R.id.button2)
+        var cocktailButton = binding.findViewById<Button>(R.id.button1)
 
         cocktailButton?.setOnClickListener {
             // Open CocktailDetailsActivity, passing the cocktail id 11007
@@ -83,12 +64,21 @@ class SearchFragment : Fragment() {
             startActivity(intent)
         }
 
-        var nonExistantCocktailButton = binding.findViewById<Button>(R.id.button3)
+        var nonExistantCocktailButton = binding.findViewById<Button>(R.id.button2)
 
         nonExistantCocktailButton?.setOnClickListener {
             Log.i("SearchFragment", "Non existant cocktail button clicked")
             val intent = Intent(activity, CocktailDetailsActivity::class.java)
             intent.putExtra(CocktailDetailsActivity.COCKTAIL_ID_EXTRA, "404")
+            startActivity(intent)
+        }
+
+        var randomCocktailButton = binding.findViewById<Button>(R.id.button3)
+
+        randomCocktailButton?.setOnClickListener {
+            Log.i("SearchFragment", "Random cocktail button clicked")
+            val intent = Intent(activity, CocktailDetailsActivity::class.java)
+            intent.putExtra(CocktailDetailsActivity.COCKTAIL_ID_EXTRA, "random")
             startActivity(intent)
         }
 

@@ -137,10 +137,11 @@ class ApiWrapper private constructor() {
         if (cocktail != null) {
             success(cocktail)
         } else {
-            val url = "$baseUrl/lookup.php?i=$id"
+            val url = if (id == "random") "$baseUrl/random.php" else "$baseUrl/lookup.php?i=$id"
             makeApiRequest(url, { body ->
                 val cocktail = gson.fromJson(body, Cocktail::class.java)
-                cocktails[id.toString()] = cocktail
+                // Only cache the cocktail if it's not random
+                if (id != "random") cocktails[id.toString()] = cocktail
                 success(cocktail)
             }, failure)
         }
