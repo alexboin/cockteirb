@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.categories.CategoriesFragment">
+    tools:context=".ui.search.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Welcome to SearchFragment" />
+        android:layout_height="?attr/actionBarSize"
+        app:title="Cockt'eirb"
+        android:textAlignment="center"
+        />
 
-    <Button
-        android:id="@+id/fetch_categories_button"
+    <android.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="16dp"
+        android:iconifiedByDefault="false"
+        app:iconifiedByDefault="false"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginLeft="16dp"
+        android:layout_below="@id/searchView"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Fetch categories" />
+        android:text="Hello, TextView!"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_centerHorizontal="true"/>
 
     <Button
-        android:id="@+id/fetch_cocktail_button"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Fetch cocktail (11007)" />
+        android:layout_below="@id/textView"
+        android:layout_marginTop="16dp"
+        android:text="Button 1"
+        android:layout_centerHorizontal="true"/>
 
     <Button
-        android:id="@+id/fetch_non_existant_cocktail_button"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="128dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Fetch non-existant cocktail (404)" />
+        android:layout_below="@id/button1"
+        android:layout_marginTop="16dp"
+        android:text="Button 2"
+        android:layout_centerHorizontal="true"/>
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button2"
+        android:layout_marginTop="16dp"
+        android:text="Button 3"
+        android:layout_centerHorizontal="true"/>
 
+    <!-- Your main content goes here -->
 
-</FrameLayout>
+</RelativeLayout>

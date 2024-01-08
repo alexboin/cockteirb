@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 
 import fr.aboin.cockteirb.R
 import fr.aboin.cockteirb.core.service.ApiWrapper
@@ -65,7 +68,7 @@ class SearchFragment : Fragment() {
 
         var apiWrapper = ApiWrapper.instance
 
-        var categoriesButton = binding.findViewById<Button>(R.id.fetch_categories_button)
+        var categoriesButton = binding.findViewById<Button>(R.id.button1)
 
         categoriesButton?.setOnClickListener {
             Log.i("SearchFragment", "Categories button clicked")
@@ -82,7 +85,7 @@ class SearchFragment : Fragment() {
             )
         }
 
-        var cocktailButton = binding.findViewById<Button>(R.id.fetch_cocktail_button)
+        var cocktailButton = binding.findViewById<Button>(R.id.button2)
 
         cocktailButton?.setOnClickListener {
             // Open CocktailDetailsActivity, passing the cocktail id 11007
@@ -92,7 +95,7 @@ class SearchFragment : Fragment() {
             startActivity(intent)
         }
 
-        var nonExistantCocktailButton = binding.findViewById<Button>(R.id.fetch_non_existant_cocktail_button)
+        var nonExistantCocktailButton = binding.findViewById<Button>(R.id.button3)
 
         nonExistantCocktailButton?.setOnClickListener {
             Log.i("SearchFragment", "Non existant cocktail button clicked")
@@ -100,6 +103,27 @@ class SearchFragment : Fragment() {
             intent.putExtra("cocktail_id", 404)
             startActivity(intent)
         }
+
+        val toolbar: MaterialToolbar = binding.findViewById(R.id.toolbar)
+        if (activity is AppCompatActivity) {
+            (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        }
+
+        val searchView: SearchView = binding.findViewById(R.id.searchView)
+        // Set up SearchView listener or perform actions as needed
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle search query submission
+                Log.i("SearchFragment", "Search query submitted: $query")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Handle search query text change
+                Log.i("SearchFragment", "Search query text changed: $newText")
+                return true
+            }
+        })
 
         return binding
     }

@@ -1,4 +1,4 @@
-package fr.aboin.cockteirb.core.ui
+package fr.aboin.cockteirb.ui.categories
 
 import android.view.LayoutInflater
 import android.view.View

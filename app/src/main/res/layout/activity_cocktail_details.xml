@@ -1,82 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fitsSystemWindows="true"
+    tools:context=".ui.cocktail.CocktailDetailsActivity">
 
-    <ProgressBar
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/ctrlActivityIndicator"
-        android:indeterminateOnly="true"
-        android:keepScreenOn="true"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-    />
-
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/ctrlMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/ctrlMainLayout"
-        android:visibility="visible"
-    >
+        android:visibility="visible">
 
-    <!-- Image -->
-    <ImageView
-        android:id="@+id/imageViewCocktail"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
-        android:layout_centerHorizontal="true"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- TextViews -->
-    <TextView
-        android:id="@+id/pop_up_cocktail_name"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageViewCocktail"
+                android:layout_width="match_parent"
+                android:layout_height="256dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bar" />
+
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:paddingEnd="24dp"
+                android:text="Cocktail name"
+                android:textSize="24sp"
+                tools:ignore="RtlSymmetry" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/categoryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category: "
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/categoryValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category value"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/servedInTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Served in: "
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/servedInValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Glass value"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/instructionsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:background="?attr/colorSurfaceContainerHigh"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Instructions"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/instructionsValueTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Instructions text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/ingredientsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/colorSurfaceContainerHigh"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Ingredients"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ingredientsValueTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Ingredients text"
+                android:textSize="16sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ingredientsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                tools:listitem="@layout/item_ingredient_and_quantity" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/favoriteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageViewCocktail"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/pop_up_cocktail_name" />
+        android:layout_marginEnd="16dp"
+        app:layout_anchor="@id/imageViewCocktail"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/outline_star_outline_24" />
 
-    <TextView
-        android:id="@+id/pop_up_cocktail_category"
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <ProgressBar
+        android:id="@+id/ctrlActivityIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pop_up_cocktail_name"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/pop_up_cocktail_category" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/pop_up_cocktail_served_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pop_up_cocktail_category"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/pop_up_cocktail_served_in" />
-
-    <TextView
-        android:id="@+id/pop_up_cocktail_instructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pop_up_cocktail_served_in"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/pop_up_cocktail_instructions" />
-
-    <TextView
-        android:id="@+id/pop_up_cocktail_ingredients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pop_up_cocktail_instructions"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/pop_up_cocktail_ingredients" />
-
-    </RelativeLayout>
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
