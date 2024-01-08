@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="recycler_view_categories" type="id" />
+    <item name="button_category" type="id" />
+    <item name="textview_selected_category" type="id" />
+</resources>
